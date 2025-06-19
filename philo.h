@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:50:48 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/19 11:58:00 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/06/19 14:36:11 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ typedef struct s_input_var
     int time_to_eat;
     int time_to_sleep;
     int number_of_times;
+    int flag_optional;
 }   t_input_var;
 
 typedef struct s_philo
@@ -51,3 +52,4 @@ void    ft_unlock_fork(t_philo *philo);
 
 //SLEEP.C
 void    ft_sleep(t_philo *philo, struct timeval *tv);
+void    ft_think(t_philo *philo, struct timeval *tv);

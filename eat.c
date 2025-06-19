@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routine.c                                          :+:      :+:    :+:   */
+/*   eat.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:15:29 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/19 11:54:29 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/06/19 12:42:04 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,11 @@ void    ft_eat(t_philo *philo, struct timeval *tv)
     if (philo->id % 2 == 0)
         ft_lock_fork_even(philo, tv);
     else if (philo->id % 2 == 1)
+    {
+        usleep(100);
         ft_lock_fork_odd(philo, tv);
+    }
+
 }
 
 void    ft_unlock_fork(t_philo *philo)

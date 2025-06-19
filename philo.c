@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:34:23 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/19 11:57:31 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/06/19 12:49:53 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,27 @@
 
 static void    ft_routine(t_philo *philo, struct timeval  *tv)
 {
-    ft_eat(philo, tv);
+    long long int   millisec;
+
+    gettimeofday(tv, NULL);
+    millisec = tv->tv_sec * 1000 + tv->tv_usec / 1000 - philo->time_last_meal;
+    if (millisec < philo->input->time_to_die)
+        ft_eat(philo, tv);
+    else
+        printf("%d\n died", philo->id);
     ft_unlock_fork(philo);
-    ft_sleep(philo, tv);
+    gettimeofday(tv, NULL);
+    millisec = tv->tv_sec * 1000 + tv->tv_usec / 1000 - philo->time_last_meal;
+    if (millisec < philo->input->time_to_die)
+        ft_sleep(philo, tv);
+    else
+        printf("%d\n died", philo->id);
+    gettimeofday(tv, NULL);
+    millisec = tv->tv_sec * 1000 + tv->tv_usec / 1000 - philo->time_last_meal;
+    if (millisec < philo->input->time_to_die)
+        ft_think(philo, tv);
+    else
+        printf("%d died\n", philo->id);
 }
 
 void    *do_things(void *arg)

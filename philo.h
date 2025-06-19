@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:50:48 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/19 14:36:11 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/06/19 16:26:46 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,10 @@ typedef struct s_philo
     int                 time_spleeping;
     int                 time_dying;
     long long int       t0;
+    int                 is_dead;
     pthread_mutex_t     *left_fork;
     pthread_mutex_t     *right_fork;
+    pthread_mutex_t     mutex_is_dead;
     t_input_var         *input;
 }   t_philo;
 
@@ -49,7 +51,11 @@ void    ft_create_philo(t_input_var *input);
 //EAT.C
 void    ft_eat(t_philo *philo, struct timeval *tv);
 void    ft_unlock_fork(t_philo *philo);
+void    print_message(t_philo *philo, struct timeval *tv, char *message);
 
 //SLEEP.C
 void    ft_sleep(t_philo *philo, struct timeval *tv);
 void    ft_think(t_philo *philo, struct timeval *tv);
+
+//DEATH.C
+void    *check_death(void *arg);

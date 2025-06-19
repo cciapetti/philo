@@ -6,35 +6,39 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:34:23 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/18 18:50:30 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/06/19 11:57:31 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+static void    ft_routine(t_philo *philo, struct timeval  *tv)
+{
+    ft_eat(philo, tv);
+    ft_unlock_fork(philo);
+    ft_sleep(philo, tv);
+}
+
 void    *do_things(void *arg)
 {
     struct timeval  *tv;
+    int             i;
 
+    i = -1;
     tv = malloc(sizeof(struct timeval));
     t_philo *philo = (t_philo *)arg;
     gettimeofday(tv, NULL);
     philo->t0 = tv->tv_sec * 1000 + tv->tv_usec / 1000;
     philo->time_last_meal = philo->t0;
-    if (philo->id % 2 == 1)
-        usleep(100);
-    // printf("tv->tv_sec * 1000 + tv->tv_usec / 1000: %lu\nphilo->time_last_meal: %llu\nphilo->input->time_to_die: %d\n", \
-    // tv->tv_sec * 1000 + tv->tv_usec / 1000, philo->time_last_meal, philo->input->time_to_die);
-    while (tv->tv_sec * 1000 + tv->tv_usec / 1000 - philo->time_last_meal < philo->input->time_to_die)
+    if (philo->input->number_of_times == -1)
     {
-        ft_lock_forks(philo);
-        printf("%llu %d is eating\n", tv->tv_sec * 1000 + tv->tv_usec / 1000 - philo->t0, philo->id);
-        usleep(philo->input->time_to_eat * 1000);
-        gettimeofday(tv, NULL);
-        philo->time_last_meal = tv->tv_sec * 1000 + tv->tv_usec / 1000;
-        pthread_mutex_unlock(philo->left_fork);
-        pthread_mutex_unlock(philo->right_fork);
-        gettimeofday(tv, NULL);
+        while (tv->tv_sec * 1000 + tv->tv_usec / 1000 - philo->time_last_meal < philo->input->time_to_die)
+            ft_routine(philo, tv);
+    }
+    else
+    {
+        while ((tv->tv_sec * 1000 + tv->tv_usec / 1000 - philo->time_last_meal < philo->input->time_to_die) && ++i < philo->input->num_philo)
+            ft_routine(philo, tv);
     }
 }
 
@@ -87,4 +91,7 @@ void    ft_create_philo(t_input_var *input)
     while (++i < input->num_philo)
         if (pthread_join(thread[i], NULL) != 0)
             return ;
+    i = -1;
+    while (++i < input->num_philo)
+        pthread_mutex_destroy(&fork[i]);
 }

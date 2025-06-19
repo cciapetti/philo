@@ -6,7 +6,7 @@
 #    By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/18 14:49:01 by cciapett          #+#    #+#              #
-#    Updated: 2025/06/18 18:15:50 by cciapett         ###   ########.fr        #
+#    Updated: 2025/06/19 11:55:42 by cciapett         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -g #-Werror
 
-SRC = main.c main_utils.c philo.c routine.c
+SRC = main.c main_utils.c philo.c eat.c sleep.c
 
 OBJ = $(SRC:.c=.o)
 

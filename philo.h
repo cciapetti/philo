@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:50:48 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/18 18:47:56 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/06/19 11:58:00 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,9 @@ int     ft_atoi(const char *nptr);
 //PHILO.C
 void    ft_create_philo(t_input_var *input);
 
-//ROUTINE.C
-void    ft_lock_forks(t_philo *philo);
+//EAT.C
+void    ft_eat(t_philo *philo, struct timeval *tv);
+void    ft_unlock_fork(t_philo *philo);
+
+//SLEEP.C
+void    ft_sleep(t_philo *philo, struct timeval *tv);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:34:23 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/20 17:10:13 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/06/20 22:35:18 by chiara_ciap      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void    *do_things(void *arg)
 
     i = -1;
     t_philo *philo = (t_philo *)arg;
-    if (philo->id % 2 == 1)
-        usleep(200);
+    // if (philo->id % 2 == 1)
+    //     usleep(200);
     if (philo->input->number_of_times == -1)
         while (1)
         {
@@ -114,15 +114,15 @@ void    ft_create_philo(t_input_var *input)
     while (++i < input->num_philo)
         if (pthread_create(&thread[i], NULL, do_things, philo[i]) != 0)
             return ;
-    usleep(1);
+    // usleep(1);
     if (pthread_create(&death, NULL, check_death, philo) != 0)
         return ;
     i = -1;
+    if (pthread_join(death, NULL) != 0)
+         return ;
     while (++i < input->num_philo)
         if (pthread_join(thread[i], NULL) != 0)
             return ;
-    if (pthread_join(death, NULL) != 0)
-         return ;
     i = -1;
     while (++i < input->num_philo)
         pthread_mutex_destroy(&fork[i]);

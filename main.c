@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:51:06 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/20 14:12:36 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/06/20 21:31:46 by chiara_ciap      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,7 @@ int ft_check_input(char **av)
 int main(int ac, char **av)
 {
     t_input_var *input;
-    int         i;
 
-    i = -1;
     input = malloc(sizeof(t_input_var));
     if (ac != 5 && ac != 6)
     {

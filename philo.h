@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:50:48 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/20 17:12:16 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/06/21 12:34:29 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_philo
     pthread_mutex_t     *left_fork;
     pthread_mutex_t     *right_fork;
     pthread_mutex_t     mutex_is_dead;
+    pthread_mutex_t     mutex_last_meal;
     t_input_var         *input;
 }   t_philo;
 

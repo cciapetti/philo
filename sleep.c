@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 11:55:46 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/20 17:11:57 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/06/21 13:11:14 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,5 @@ void    ft_think(t_philo *philo)
 
     gettimeofday(&tv , NULL);
     print_message(philo, tv, "is thinking");
+    usleep(100);
 }

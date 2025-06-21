@@ -3,27 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   death.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
+/*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 14:54:02 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/20 22:45:04 by chiara_ciap      ###   ########.fr       */
+/*   Updated: 2025/06/21 12:52:29 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void    set_all_one(t_philo **philo, int tot)
+static int    set_all_one(t_philo **philo, int tot, int index)
 {
     int i;
 
-    i = 0;
-    while (i < tot)
+    i = -1;
+    while (++i < tot)
     {
-        pthread_mutex_lock(&philo[i]->mutex_is_dead);
-        philo[i]->is_dead = 1;
-        i++;
-        pthread_mutex_unlock(&philo[i]->mutex_is_dead);
+        if (index != i)
+        {
+            pthread_mutex_lock(&philo[i]->mutex_is_dead);
+            philo[i]->is_dead = 1;
+            pthread_mutex_unlock(&philo[i]->mutex_is_dead);   
+        }
     }
+    return (0);
 }
 
 static int ft_check_all_eat(t_philo **philo, int tot)
@@ -58,21 +61,25 @@ void    *check_death(void *arg)
     usleep(100);
     while (1)
     {
-        usleep(10);
+        usleep(100);
         i = -1;
         while (++i < tot)
         {
-            gettimeofday(tv, NULL);
-            pthread_mutex_lock(&philo[i]->mutex_is_dead);
-            millisec = (tv->tv_sec * 1000) + (tv->tv_usec / 1000) - philo[i]->time_last_meal;
-            pthread_mutex_unlock(&philo[i]->mutex_is_dead);
             if (ft_check_all_eat(philo, tot) == 1)
-                return (free(tv), NULL);
+                return (printf("HANNO MANGIATO\n"), free(tv), NULL);
+            gettimeofday(tv, NULL);
+            pthread_mutex_lock(&philo[i]->mutex_last_meal);
+            millisec = (tv->tv_sec * 1000) + (tv->tv_usec / 1000) - philo[i]->time_last_meal;
+            pthread_mutex_unlock(&philo[i]->mutex_last_meal);
             if (millisec > philo[i]->input->time_to_die)
             {
+                printf("MILLISEC: %lld\nTIME TO DIE: %d\n", millisec, philo[i]->input->time_to_die);
+                pthread_mutex_lock(&philo[i]->mutex_is_dead);
+                philo[i]->is_dead = 1;
+                set_all_one(philo, tot, i);
                 printf("%lld %d died\n", (tv->tv_sec * 1000) + (tv->tv_usec / 1000) - philo[i]->t0, philo[i]->id);
-                set_all_one(philo, tot);
-                return (free(tv), NULL);
+                pthread_mutex_unlock(&philo[i]->mutex_is_dead);
+                return (printf("TEMPO DI MORTE\n"), free(tv), NULL);
             }
         }
     }

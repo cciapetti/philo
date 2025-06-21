@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
+/*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:34:23 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/20 22:35:18 by chiara_ciap      ###   ########.fr       */
+/*   Updated: 2025/06/21 12:55:17 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,31 @@
 
 static void    ft_routine(t_philo *philo)
 {
-    if (philo->is_dead == 0)
+    ft_eat(philo);
+    ft_unlock_fork(philo);
+    pthread_mutex_lock(&philo->mutex_is_dead);
+    if (philo->is_dead == 1)
     {
-        ft_eat(philo);
-        ft_unlock_fork(philo);   
+        pthread_mutex_unlock(&philo->mutex_is_dead);
+        return ;   
     }
-    if (philo->is_dead == 0)
-        ft_sleep(philo);
-    if (philo->is_dead == 0)
-        ft_think(philo);
+    pthread_mutex_unlock(&philo->mutex_is_dead); 
+    ft_sleep(philo);
+    pthread_mutex_lock(&philo->mutex_is_dead);
+    if (philo->is_dead == 1)
+    {
+        pthread_mutex_unlock(&philo->mutex_is_dead);
+        return ;   
+    }
+    pthread_mutex_unlock(&philo->mutex_is_dead);
+    ft_think(philo);
+    pthread_mutex_lock(&philo->mutex_is_dead);
+    if (philo->is_dead == 1)
+    {
+        pthread_mutex_unlock(&philo->mutex_is_dead);
+        return ;   
+    }
+    pthread_mutex_unlock(&philo->mutex_is_dead);
 }
 
 void    *do_things(void *arg)
@@ -31,9 +47,10 @@ void    *do_things(void *arg)
 
     i = -1;
     t_philo *philo = (t_philo *)arg;
-    // if (philo->id % 2 == 1)
-    //     usleep(200);
     if (philo->input->number_of_times == -1)
+    {
+        if (philo->id % 2 == 0)
+            usleep(100);
         while (1)
         {
             pthread_mutex_lock(&philo->mutex_is_dead);
@@ -42,8 +59,11 @@ void    *do_things(void *arg)
             pthread_mutex_unlock(&philo->mutex_is_dead);
             ft_routine(philo);
         }
+    }
     else
     {
+        if (philo->id % 2 == 0)
+            usleep(100);
         while (++i < philo->input->number_of_times)
         {
             pthread_mutex_lock(&philo->mutex_is_dead);
@@ -76,6 +96,7 @@ void    ft_init_philo(t_philo **philo, t_input_var *input, pthread_mutex_t *fork
         philo[i]->time_spleeping = 0;
         philo[i]->is_dead = 0;
         pthread_mutex_init(&philo[i]->mutex_is_dead, NULL);
+        pthread_mutex_init(&philo[i]->mutex_last_meal, NULL);
         philo[i]->input = input;
         if (i == 0)
         {
@@ -114,15 +135,14 @@ void    ft_create_philo(t_input_var *input)
     while (++i < input->num_philo)
         if (pthread_create(&thread[i], NULL, do_things, philo[i]) != 0)
             return ;
-    // usleep(1);
     if (pthread_create(&death, NULL, check_death, philo) != 0)
         return ;
     i = -1;
-    if (pthread_join(death, NULL) != 0)
-         return ;
     while (++i < input->num_philo)
         if (pthread_join(thread[i], NULL) != 0)
             return ;
+    if (pthread_join(death, NULL) != 0)
+        return ;
     i = -1;
     while (++i < input->num_philo)
         pthread_mutex_destroy(&fork[i]);

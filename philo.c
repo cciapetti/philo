@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:34:23 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/21 12:55:17 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/06/21 19:51:33 by chiara_ciap      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void    *do_things(void *arg)
     if (philo->input->number_of_times == -1)
     {
         if (philo->id % 2 == 0)
-            usleep(100);
+            my_usleep(100);
         while (1)
         {
             pthread_mutex_lock(&philo->mutex_is_dead);
@@ -63,7 +63,7 @@ void    *do_things(void *arg)
     else
     {
         if (philo->id % 2 == 0)
-            usleep(100);
+            my_usleep(100);
         while (++i < philo->input->number_of_times)
         {
             pthread_mutex_lock(&philo->mutex_is_dead);

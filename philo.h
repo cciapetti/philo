@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:50:48 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/21 12:34:29 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/06/21 19:50:26 by chiara_ciap      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void    print_message(t_philo *philo, struct timeval tv, char *message);
 //SLEEP.C
 void    ft_sleep(t_philo *philo);
 void    ft_think(t_philo *philo);
+void    my_usleep(int time_to_wait);
 
 //DEATH.C
 void    *check_death(void *arg);

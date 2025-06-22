@@ -6,7 +6,7 @@
 /*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:50:48 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/22 13:25:02 by chiara_ciap      ###   ########.fr       */
+/*   Updated: 2025/06/22 19:45:28 by chiara_ciap      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,7 @@ typedef struct s_input_var
 typedef struct s_philo
 {
 	int					id;
-	int					time_to_die;
 	long long int		time_last_meal;
-	int					time_spleeping;
-	int					time_dying;
 	long long int		t0;
 	int					is_dead;
 	pthread_mutex_t		*left_fork;
@@ -57,6 +54,8 @@ void	print_message(t_philo *philo, struct timeval tv, char *message);
 void	ft_sleep(t_philo *philo);
 void	ft_think(t_philo *philo);
 void	my_usleep(int time_to_wait);
+void	ft_compute_msec(struct timeval *tv, long long int *msec, \
+	t_philo *philo);
 
 //DEATH.C
 void	*check_death(void *arg);

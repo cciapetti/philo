@@ -6,38 +6,41 @@
 /*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:34:23 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/22 13:22:03 by chiara_ciap      ###   ########.fr       */
+/*   Updated: 2025/06/22 19:40:58 by chiara_ciap      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	ft_routine(t_philo *philo)
+static int	ft_routine(t_philo *philo)
 {
+	pthread_mutex_lock(&philo->mutex_is_dead);
+	if (philo->is_dead == 1)
+		return (pthread_mutex_unlock(&philo->mutex_is_dead), 1);
+	pthread_mutex_unlock(&philo->mutex_is_dead);
 	ft_eat(philo);
 	ft_unlock_fork(philo);
 	pthread_mutex_lock(&philo->mutex_is_dead);
 	if (philo->is_dead == 1)
-	{
-		pthread_mutex_unlock(&philo->mutex_is_dead);
-		return ;
-	}
+		return (pthread_mutex_unlock(&philo->mutex_is_dead), 1);
 	pthread_mutex_unlock(&philo->mutex_is_dead);
 	ft_sleep(philo);
 	pthread_mutex_lock(&philo->mutex_is_dead);
 	if (philo->is_dead == 1)
-	{
-		pthread_mutex_unlock(&philo->mutex_is_dead);
-		return ;
-	}
+		return (pthread_mutex_unlock(&philo->mutex_is_dead), 1);
 	pthread_mutex_unlock(&philo->mutex_is_dead);
 	ft_think(philo);
 	pthread_mutex_lock(&philo->mutex_is_dead);
 	if (philo->is_dead == 1)
-	{
-		pthread_mutex_unlock(&philo->mutex_is_dead);
-		return ;
-	}
+		return (pthread_mutex_unlock(&philo->mutex_is_dead), 1);
+	pthread_mutex_unlock(&philo->mutex_is_dead);
+	return (0);
+}
+
+void	ft_finish_to_eat(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->mutex_is_dead);
+	philo->is_dead = 2;
 	pthread_mutex_unlock(&philo->mutex_is_dead);
 }
 
@@ -53,56 +56,41 @@ void	*do_things(void *arg)
 		if (philo->id % 2 == 0)
 			my_usleep(100);
 		while (1)
-		{
-			pthread_mutex_lock(&philo->mutex_is_dead);
-			if (philo->is_dead == 1)
-				return (pthread_mutex_unlock(&philo->mutex_is_dead), NULL);
-			pthread_mutex_unlock(&philo->mutex_is_dead);
-			ft_routine(philo);
-		}
+			if (ft_routine(philo) == 1)
+				return (NULL);
 	}
 	else
 	{
 		if (philo->id % 2 == 0)
 			my_usleep(100);
 		while (++i < philo->input->number_of_times)
-		{
-			pthread_mutex_lock(&philo->mutex_is_dead);
-			if (philo->is_dead == 1)
-				return (pthread_mutex_unlock(&philo->mutex_is_dead), NULL);
-			pthread_mutex_unlock(&philo->mutex_is_dead);
-			ft_routine(philo);
-		}
-		pthread_mutex_lock(&philo->mutex_is_dead);
-		philo->is_dead = 2;
-		pthread_mutex_unlock(&philo->mutex_is_dead);
+			if (ft_routine(philo) == 1)
+				return (NULL);
+		ft_finish_to_eat(philo);
 	}
 	return (NULL);
 }
 
-void	ft_init_philo(t_philo **philo, t_input_var *input, pthread_mutex_t *fork)
+void	ft_init_philo(t_philo **philo, t_input_var *inp, pthread_mutex_t *fork)
 {
 	int				i;
 	struct timeval	tv;
 
 	i = -1;
-	while (++i < input->num_philo)
+	while (++i < inp->num_philo)
 	{
 		philo[i]->id = i;
-		philo[i]->time_to_die = input->time_to_die;
-		philo[i]->time_dying = 0;
 		gettimeofday(&tv, NULL);
 		philo[i]->t0 = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 		philo[i]->time_last_meal = philo[i]->t0;
-		philo[i]->time_spleeping = 0;
 		philo[i]->is_dead = 0;
 		pthread_mutex_init(&philo[i]->mutex_is_dead, NULL);
 		pthread_mutex_init(&philo[i]->mutex_last_meal, NULL);
-		philo[i]->input = input;
+		philo[i]->input = inp;
 		if (i == 0)
 		{
 			philo[i]->left_fork = &fork[i];
-			philo[i]->right_fork = &fork[input->num_philo - 1];
+			philo[i]->right_fork = &fork[inp->num_philo - 1];
 		}
 		else
 		{

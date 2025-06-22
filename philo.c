@@ -6,7 +6,7 @@
 /*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:34:23 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/22 19:40:58 by chiara_ciap      ###   ########.fr       */
+/*   Updated: 2025/06/22 21:58:07 by chiara_ciap      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	*do_things(void *arg)
 	return (NULL);
 }
 
-void	ft_init_philo(t_philo **philo, t_input_var *inp, pthread_mutex_t *fork)
+void	ft_init_philo(t_philo **philo, t_input *inp, pthread_mutex_t *fork)
 {
 	int				i;
 	struct timeval	tv;
@@ -100,19 +100,19 @@ void	ft_init_philo(t_philo **philo, t_input_var *inp, pthread_mutex_t *fork)
 	}
 }
 
-void	ft_create_philo(t_input_var *input)
+void	ft_create_philo(t_input *input)
 {
-	pthread_mutex_t	fork[input->num_philo];
-	t_philo			*philo[input->num_philo];
-	pthread_t		thread[input->num_philo];
+	pthread_mutex_t	*fork;
+	t_philo			**philo;
+	pthread_t		*thread;
 	pthread_t		death;
 	int				i;
 
+	philo = malloc(sizeof(t_philo **) * input->num_philo);
+	fork = malloc(sizeof(pthread_mutex_t) * input->num_philo);
+	thread = malloc(sizeof(pthread_t) * input->num_philo);
 	if (input->num_philo == 1)
-	{
-		one_philo(input);
-		return ;
-	}
+		return (one_philo(input));
 	i = -1;
 	while (++i < input->num_philo)
 		philo[i] = malloc(sizeof(t_philo));
@@ -120,18 +120,7 @@ void	ft_create_philo(t_input_var *input)
 	while (++i < input->num_philo)
 		pthread_mutex_init(&fork[i], NULL);
 	ft_init_philo(philo, input, fork);
-	i = -1;
-	while (++i < input->num_philo)
-		if (pthread_create(&thread[i], NULL, do_things, philo[i]) != 0)
-			return ;
-	if (pthread_create(&death, NULL, check_death, philo) != 0)
-		return ;
-	i = -1;
-	while (++i < input->num_philo)
-		if (pthread_join(thread[i], NULL) != 0)
-			return ;
-	if (pthread_join(death, NULL) != 0)
-		return ;
+	ft_threads(input, philo, thread, &death);
 	i = -1;
 	while (++i < input->num_philo)
 		pthread_mutex_destroy(&fork[i]);

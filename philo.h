@@ -6,7 +6,7 @@
 /*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:50:48 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/22 19:45:28 by chiara_ciap      ###   ########.fr       */
+/*   Updated: 2025/06/22 22:01:33 by chiara_ciap      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ typedef struct s_input_var
 	int	time_to_sleep;
 	int	number_of_times;
 	int	flag_optional;
-}	t_input_var;
+}	t_input;
 
 typedef struct s_philo
 {
@@ -36,14 +36,19 @@ typedef struct s_philo
 	pthread_mutex_t		*right_fork;
 	pthread_mutex_t		mutex_is_dead;
 	pthread_mutex_t		mutex_last_meal;
-	t_input_var			*input;
+	t_input				*input;
 }	t_philo;
 
 //MAIN_UTILS.C
 int		ft_atoi(const char *nptr);
 
 //PHILO.C
-void	ft_create_philo(t_input_var *input);
+void	ft_create_philo(t_input *input);
+void	*do_things(void *arg);
+
+//PHILO_UTILS.C
+void	ft_threads(t_input *inp, t_philo **phi, pthread_t *th, \
+	pthread_t *death);
 
 //EAT.C
 void	ft_eat(t_philo *philo);
@@ -61,4 +66,4 @@ void	ft_compute_msec(struct timeval *tv, long long int *msec, \
 void	*check_death(void *arg);
 
 //ONE_PHILO.C
-void	one_philo(t_input_var *input);
+void	one_philo(t_input *input);

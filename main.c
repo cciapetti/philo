@@ -6,7 +6,7 @@
 /*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:51:06 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/22 13:18:56 by chiara_ciap      ###   ########.fr       */
+/*   Updated: 2025/06/22 21:55:13 by chiara_ciap      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	ft_error_message(void)
 	printf("time_to_sleep\n[number_of_times_each_philosopher_must_eat]\n");
 }
 
-int	ft_check_positive(t_input_var *input)
+int	ft_check_positive(t_input *input)
 {
 	if (input->num_philo <= 0)
 		return (1);
@@ -33,7 +33,7 @@ int	ft_check_positive(t_input_var *input)
 	return (0);
 }
 
-static int	ft_initialize_input(t_input_var *input, int ac, char **av)
+static int	ft_initialize_input(t_input *input, int ac, char **av)
 {
 	if (ac == 5)
 	{
@@ -79,9 +79,9 @@ int	ft_check_input(char **av)
 
 int	main(int ac, char **av)
 {
-	t_input_var	*input;
+	t_input	*input;
 
-	input = malloc(sizeof(t_input_var));
+	input = malloc(sizeof(t_input));
 	if (ac != 5 && ac != 6)
 	{
 		ft_error_message();

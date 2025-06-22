@@ -6,7 +6,7 @@
 /*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 14:20:30 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/22 13:19:54 by chiara_ciap      ###   ########.fr       */
+/*   Updated: 2025/06/22 22:00:49 by chiara_ciap      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ static void	*one_philo_exe(void *arg)
 	long long int	millisec;
 	struct timeval	tv;
 	long long int	t0;
-	t_input_var		*input;
+	t_input			*input;
 
-	input = (t_input_var *)arg;
+	input = (t_input *)arg;
 	gettimeofday(&tv, NULL);
 	t0 = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 	millisec = (tv.tv_sec * 1000) + (tv.tv_usec / 1000) - t0;
@@ -29,7 +29,7 @@ static void	*one_philo_exe(void *arg)
 	return (NULL);
 }
 
-void	one_philo(t_input_var *input)
+void	one_philo(t_input *input)
 {
 	pthread_t	one_philo;
 

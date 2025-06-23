@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   death.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
+/*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 14:54:02 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/22 19:21:48 by chiara_ciap      ###   ########.fr       */
+/*   Updated: 2025/06/23 16:44:00 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	*check_death(void *arg)
 			if (ft_check_all_eat(philo) == 1)
 				return (NULL);
 			ft_compute_msec(&tv, &millisec, philo[i]);
-			if (millisec > philo[i]->input->time_to_die)
+			if (millisec >= philo[i]->input->time_to_die)
 			{
 				pthread_mutex_lock(&philo[i]->mutex_is_dead);
 				philo_died(philo[i], &tv);

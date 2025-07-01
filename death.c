@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 14:54:02 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/01 16:33:26 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/01 19:09:59 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ static int	set_all_one(t_philo **philo)
 	tot = philo[0]->input->num_philo;
 	while (++i < tot)
 	{
-		//pthread_mutex_lock(philo[i]->mutex_is_dead);
+		pthread_mutex_lock((*philo)->mutex_is_dead);
 		philo[i]->is_dead = 1;
-		//pthread_mutex_unlock(philo[i]->mutex_is_dead);
+		pthread_mutex_unlock((*philo)->mutex_is_dead);
 	}
 	return (0);
 }
@@ -54,8 +54,10 @@ void	philo_died(t_philo *philo, struct timeval *tv)
 	long long int	msec;
 
 	msec = (tv->tv_sec * 1000) + (tv->tv_usec / 1000);
+	pthread_mutex_lock(philo->mutex_is_dead);
 	philo->is_dead = 1;
 	printf("%lld %d died\n", msec - philo->t0, philo->id);
+	pthread_mutex_unlock(philo->mutex_is_dead);
 }
 
 void	ft_init(int *i)
@@ -76,17 +78,19 @@ void	*check_death(void *arg)
 	while (1)
 	{
 		ft_init(&i);
+		if (ft_check_all_eat(philo) == 1)
+		{
+			printf("FILOSOFI CHE HANNO MANGIATO\n");
+			return (NULL);	
+		}
 		while (++i < philo[0]->input->num_philo)
 		{
-			if (ft_check_all_eat(philo) == 1)
-				return (NULL);
 			ft_compute_msec(&tv, &millisec, philo[i]);
 			if (millisec >= philo[i]->input->time_to_die)
 			{
-				pthread_mutex_lock(philo[i]->mutex_is_dead);
 				philo_died(philo[i], &tv);
 				set_all_one(philo);
-				return (pthread_mutex_unlock(philo[i]->mutex_is_dead), NULL);
+				return (NULL);
 			}
 		}
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
+/*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/22 21:46:22 by chiara_ciap       #+#    #+#             */
-/*   Updated: 2025/06/22 22:00:27 by chiara_ciap      ###   ########.fr       */
+/*   Updated: 2025/07/01 16:43:06 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

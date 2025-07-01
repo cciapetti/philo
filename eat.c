@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   eat.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
+/*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:15:29 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/22 13:17:53 by chiara_ciap      ###   ########.fr       */
+/*   Updated: 2025/07/01 16:29:41 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	print_message(t_philo *philo, struct timeval tv, char *message)
 
 	gettimeofday(&tv, NULL);
 	millisec = (tv.tv_sec * 1000) + (tv.tv_usec / 1000) - philo->t0;
-	pthread_mutex_lock(&philo->mutex_is_dead);
+	pthread_mutex_lock(philo->mutex_is_dead);
 	if (philo->is_dead == 0)
 		printf("%lld %d %s\n", millisec, philo->id, message);
-	pthread_mutex_unlock(&philo->mutex_is_dead);
+	pthread_mutex_unlock(philo->mutex_is_dead);
 }
 
 void	ft_lock_fork(t_philo *philo)
@@ -35,9 +35,9 @@ void	ft_lock_fork(t_philo *philo)
 	print_message(philo, tv, "has taken a fork");
 	print_message(philo, tv, "is eating");
 	gettimeofday(&tv, NULL);
-	pthread_mutex_lock(&philo->mutex_last_meal);
+	pthread_mutex_lock(philo->mutex_last_meal);
 	philo->time_last_meal = tv.tv_sec * 1000 + tv.tv_usec / 1000;
-	pthread_mutex_unlock(&philo->mutex_last_meal);
+	pthread_mutex_unlock(philo->mutex_last_meal);
 	my_usleep(philo->input->time_to_eat * 1000);
 }
 
@@ -52,9 +52,9 @@ void	ft_lock_fork_first(t_philo *philo)
 	print_message(philo, tv, "has taken a fork");
 	print_message(philo, tv, "is eating");
 	gettimeofday(&tv, NULL);
-	pthread_mutex_lock(&philo->mutex_last_meal);
+	pthread_mutex_lock(philo->mutex_last_meal);
 	philo->time_last_meal = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
-	pthread_mutex_unlock(&philo->mutex_last_meal);
+	pthread_mutex_unlock(philo->mutex_last_meal);
 	my_usleep(philo->input->time_to_eat * 1000);
 }
 

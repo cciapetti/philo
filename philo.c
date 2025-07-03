@@ -6,13 +6,20 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:34:23 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/01 17:17:03 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/03 17:10:44 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	ft_routine(t_philo *philo)
+void	ft_finish_to_eat(t_philo *philo)
+{
+	pthread_mutex_lock(philo->mutex_finish_to_eat);
+	philo->finish_to_eat = 1;
+	pthread_mutex_unlock(philo->mutex_finish_to_eat);
+}
+
+static int	ft_routine(t_philo *philo, int num_cycle)
 {
 	pthread_mutex_lock(philo->mutex_is_dead);
 	if (philo->is_dead == 1)
@@ -20,6 +27,9 @@ static int	ft_routine(t_philo *philo)
 	pthread_mutex_unlock(philo->mutex_is_dead);
 	ft_eat(philo);
 	ft_unlock_fork(philo);
+	if (philo->input->number_of_times != -1)
+		if (num_cycle == philo->input->number_of_times - 1)
+			ft_finish_to_eat(philo);
 	pthread_mutex_lock(philo->mutex_is_dead);
 	if (philo->is_dead == 1)
 		return (pthread_mutex_unlock(philo->mutex_is_dead), 1);
@@ -37,13 +47,6 @@ static int	ft_routine(t_philo *philo)
 	return (0);
 }
 
-void	ft_finish_to_eat(t_philo *philo)
-{
-	pthread_mutex_lock(philo->mutex_is_dead);
-	philo->is_dead = 2;
-	pthread_mutex_unlock(philo->mutex_is_dead);
-}
-
 void	*do_things(void *arg)
 {
 	int		i;
@@ -56,7 +59,7 @@ void	*do_things(void *arg)
 		if (philo->id % 2 == 0)
 			my_usleep(100);
 		while (1)
-			if (ft_routine(philo) == 1)
+			if (ft_routine(philo, i) == 1)
 				return (NULL);
 	}
 	else
@@ -64,9 +67,8 @@ void	*do_things(void *arg)
 		if (philo->id % 2 == 0)
 			my_usleep(100);
 		while (++i < philo->input->number_of_times)
-			if (ft_routine(philo) == 1)
+			if (ft_routine(philo, i) == 1)
 				return (NULL);
-		ft_finish_to_eat(philo);
 	}
 	return (NULL);
 }
@@ -84,34 +86,37 @@ void	ft_init_philo(t_philo **philo, t_input *inp, t_mutex *mutex)
 		philo[i]->t0 = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 		philo[i]->time_last_meal = philo[i]->t0;
 		philo[i]->is_dead = 0;
+		philo[i]->finish_to_eat = 0;
 		philo[i]->mutex_is_dead = mutex->dead;
-		philo[i]->mutex_last_meal = mutex->last_meal;
+		philo[i]->mutex_last_meal = &mutex->last_meal[i];
+		philo[i]->mutex_finish_to_eat = &mutex->finish_to_eat[i];
 		philo[i]->input = inp;
+		philo[i]->left_fork = &mutex->fork[i];
 		if (i == 0)
-		{
-			philo[i]->left_fork = &mutex->fork[i];
 			philo[i]->right_fork = &mutex->fork[inp->num_philo - 1];
-		}
 		else
-		{
-			philo[i]->left_fork = &mutex->fork[i];
 			philo[i]->right_fork = &mutex->fork[i - 1];
-		}
 	}
 }
 
-void		ft_init_mutex(t_mutex *mutex, t_input *input)
+void	ft_init_mutex(t_mutex *mutex, t_input *input)
 {
 	int	i;
 
 	i = -1;
 	mutex->fork = malloc(sizeof(pthread_mutex_t) * input->num_philo);
 	mutex->dead = malloc(sizeof(pthread_mutex_t));
-	mutex->last_meal = malloc(sizeof(pthread_mutex_t));
+	mutex->last_meal = malloc(sizeof(pthread_mutex_t) * input->num_philo);
+	mutex->finish_to_eat = malloc(sizeof(pthread_mutex_t) * input->num_philo);
 	while (++i < input->num_philo)
 		pthread_mutex_init(&mutex->fork[i], NULL);
 	pthread_mutex_init(mutex->dead, NULL);
-	pthread_mutex_init(mutex->last_meal, NULL);
+	i = -1;
+	while (++i < input->num_philo)
+		pthread_mutex_init(&mutex->last_meal[i], NULL);
+	i = -1;
+	while (++i < input->num_philo)
+		pthread_mutex_init(&mutex->finish_to_eat[i], NULL);
 }
 
 void	ft_destroy_mutex(t_mutex *mutex, t_input *input)
@@ -122,12 +127,17 @@ void	ft_destroy_mutex(t_mutex *mutex, t_input *input)
 	while (++i < input->num_philo)
 		pthread_mutex_destroy(&mutex->fork[i]);
 	pthread_mutex_destroy(mutex->dead);
-	pthread_mutex_destroy(mutex->last_meal);
+	i = -1;
+	while (++i < input->num_philo)
+		pthread_mutex_destroy(&mutex->last_meal[i]);
+	i = -1;
+	while (++i < input->num_philo)
+		pthread_mutex_destroy(&mutex->finish_to_eat[i]);
 	free(mutex->fork);
 	free(mutex->dead);
 	free(mutex->last_meal);
+	free(mutex->finish_to_eat);
 }
-
 
 void	ft_create_philo(t_input *input)
 {

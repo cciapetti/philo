@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:15:29 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/01 16:29:41 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:48:00 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,12 @@ void	print_message(t_philo *philo, struct timeval tv, char *message)
 
 	gettimeofday(&tv, NULL);
 	millisec = (tv.tv_sec * 1000) + (tv.tv_usec / 1000) - philo->t0;
+	pthread_mutex_lock(philo->mutex_finish_to_eat);
 	pthread_mutex_lock(philo->mutex_is_dead);
-	if (philo->is_dead == 0)
+	if (philo->is_dead == 0 && philo->finish_to_eat != 2)
 		printf("%lld %d %s\n", millisec, philo->id, message);
 	pthread_mutex_unlock(philo->mutex_is_dead);
+	pthread_mutex_unlock(philo->mutex_finish_to_eat);
 }
 
 void	ft_lock_fork(t_philo *philo)

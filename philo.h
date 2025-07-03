@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:50:48 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/01 16:58:34 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:33:58 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,12 @@ typedef struct s_philo
 	long long int		time_last_meal;
 	long long int		t0;
 	int					is_dead;
+	int					finish_to_eat;
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;
 	pthread_mutex_t		*mutex_is_dead;
 	pthread_mutex_t		*mutex_last_meal;
+	pthread_mutex_t		*mutex_finish_to_eat;
 	t_input				*input;
 }	t_philo;
 
@@ -44,6 +46,7 @@ typedef struct s_mutex
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	*dead;
 	pthread_mutex_t	*last_meal;
+	pthread_mutex_t	*finish_to_eat;
 }	t_mutex;
 
 //MAIN_UTILS.C

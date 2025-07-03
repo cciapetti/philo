@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 14:54:02 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/01 19:09:59 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/03 16:56:56 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,22 @@ static int	ft_check_all_eat(t_philo **philo)
 	tot = philo[0]->input->num_philo;
 	while (++i < tot)
 	{
-		pthread_mutex_lock(philo[i]->mutex_is_dead);
-		if (philo[i]->is_dead == 2)
+		pthread_mutex_lock(philo[i]->mutex_finish_to_eat);
+		if (philo[i]->finish_to_eat == 1)
 			j++;
-		pthread_mutex_unlock(philo[i]->mutex_is_dead);
+		pthread_mutex_unlock(philo[i]->mutex_finish_to_eat);
 	}
 	if (j == tot)
+	{
+		i = -1;
+		while (++i < tot)
+		{
+			pthread_mutex_lock(philo[i]->mutex_finish_to_eat);
+			philo[i]->finish_to_eat = 2;
+			pthread_mutex_unlock(philo[i]->mutex_finish_to_eat);
+		}
 		return (1);
+	}
 	return (0);
 }
 
@@ -79,10 +88,7 @@ void	*check_death(void *arg)
 	{
 		ft_init(&i);
 		if (ft_check_all_eat(philo) == 1)
-		{
-			printf("FILOSOFI CHE HANNO MANGIATO\n");
-			return (NULL);	
-		}
+			return (NULL);
 		while (++i < philo[0]->input->num_philo)
 		{
 			ft_compute_msec(&tv, &millisec, philo[i]);

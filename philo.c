@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:34:23 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/04 15:24:16 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:36:03 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	*do_things(void *arg)
 	t_philo	*philo;
 
 	i = -1;
-	if ()
 	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
 		usleep(100);

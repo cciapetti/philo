@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 14:54:02 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/04 14:58:27 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/04 16:21:42 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ static int	ft_check_all_eat(t_philo **philo)
 	}
 	return (0);
 }
-
 
 void	*check_death(void *arg)
 {

@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:34:23 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/04 15:36:03 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/04 16:22:19 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ void	*do_things(void *arg)
 	{
 		while (1)
 		{
-			if (philo->id % 2 == 0)
-				usleep(100);
+			// if (philo->id % 2 == 0)
+			// 	usleep(100);
 			if (ft_routine(philo, i) == 1)
 				return (NULL);
 		}
@@ -68,8 +68,8 @@ void	*do_things(void *arg)
 	{
 		while (++i < philo->input->number_of_times)
 		{
-			if (philo->id % 2 == 0)
-				usleep(100);
+			// if (philo->id % 2 == 0)
+			// 	usleep(100);
 			if (ft_routine(philo, i) == 1)
 				return (NULL);
 		}

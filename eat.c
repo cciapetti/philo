@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:15:29 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/04 15:16:51 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/04 16:21:56 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ void	ft_lock_fork(t_philo *philo)
 {
 	struct timeval	tv;
 
-	pthread_mutex_lock(philo->left_fork);
+	pthread_mutex_lock(philo->right_fork);
 	gettimeofday(&tv, NULL);
 	print_message(philo, &tv, "has taken a fork");
-	pthread_mutex_lock(philo->right_fork);
+	pthread_mutex_lock(philo->left_fork);
 	gettimeofday(&tv, NULL);
 	print_message(philo, &tv, "has taken a fork");
 	gettimeofday(&tv, NULL);
@@ -45,10 +45,10 @@ void	ft_lock_fork_first(t_philo *philo)
 {
 	struct timeval	tv;
 
-	pthread_mutex_lock(philo->right_fork);
+	pthread_mutex_lock(philo->left_fork);
 	gettimeofday(&tv, NULL);
 	print_message(philo, &tv, "has taken a fork");
-	pthread_mutex_lock(philo->left_fork);
+	pthread_mutex_lock(philo->right_fork);
 	gettimeofday(&tv, NULL);
 	print_message(philo, &tv, "has taken a fork");
 	gettimeofday(&tv, NULL);
@@ -69,6 +69,14 @@ void	ft_eat(t_philo *philo)
 
 void	ft_unlock_fork(t_philo *philo)
 {
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
+	if (philo->id % 2 == 0)
+	{
+		pthread_mutex_unlock(philo->left_fork);
+		pthread_mutex_unlock(philo->right_fork);
+	}
+	else
+	{
+		pthread_mutex_unlock(philo->right_fork);
+		pthread_mutex_unlock(philo->left_fork);
+	}
 }

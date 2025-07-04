@@ -6,17 +6,18 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:34:23 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/03 17:10:44 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/04 13:01:32 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	ft_finish_to_eat(t_philo *philo)
+int	ft_finish_to_eat(t_philo *philo)
 {
 	pthread_mutex_lock(philo->mutex_finish_to_eat);
 	philo->finish_to_eat = 1;
 	pthread_mutex_unlock(philo->mutex_finish_to_eat);
+	return (0);
 }
 
 static int	ft_routine(t_philo *philo, int num_cycle)
@@ -29,7 +30,8 @@ static int	ft_routine(t_philo *philo, int num_cycle)
 	ft_unlock_fork(philo);
 	if (philo->input->number_of_times != -1)
 		if (num_cycle == philo->input->number_of_times - 1)
-			ft_finish_to_eat(philo);
+			if (ft_finish_to_eat(philo) == 0)
+				return (1);
 	pthread_mutex_lock(philo->mutex_is_dead);
 	if (philo->is_dead == 1)
 		return (pthread_mutex_unlock(philo->mutex_is_dead), 1);
@@ -40,10 +42,6 @@ static int	ft_routine(t_philo *philo, int num_cycle)
 		return (pthread_mutex_unlock(philo->mutex_is_dead), 1);
 	pthread_mutex_unlock(philo->mutex_is_dead);
 	ft_think(philo);
-	pthread_mutex_lock(philo->mutex_is_dead);
-	if (philo->is_dead == 1)
-		return (pthread_mutex_unlock(philo->mutex_is_dead), 1);
-	pthread_mutex_unlock(philo->mutex_is_dead);
 	return (0);
 }
 

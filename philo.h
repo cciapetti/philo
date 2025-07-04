@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:50:48 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/03 16:33:58 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/04 13:09:46 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	ft_threads(t_input *inp, t_philo **phi, pthread_t *th, \
 //EAT.C
 void	ft_eat(t_philo *philo);
 void	ft_unlock_fork(t_philo *philo);
-void	print_message(t_philo *philo, struct timeval tv, char *message);
+void	print_message(t_philo *philo, struct timeval *tv, char *message);
 
 //SLEEP.C
 void	ft_sleep(t_philo *philo);

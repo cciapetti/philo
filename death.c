@@ -6,25 +6,26 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 14:54:02 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/03 16:56:56 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/04 13:08:18 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	set_all_one(t_philo **philo)
+static int	set_all_one(t_philo **philo, int index, struct timeval *tv)
 {
-	int	i;
-	int	tot;
+	int				i;
+	int				tot;
+	long long int	msec;
 
+	msec = (tv->tv_sec * 1000) + (tv->tv_usec / 1000);
 	i = -1;
 	tot = philo[0]->input->num_philo;
+	pthread_mutex_lock((*philo)->mutex_is_dead);
 	while (++i < tot)
-	{
-		pthread_mutex_lock((*philo)->mutex_is_dead);
 		philo[i]->is_dead = 1;
-		pthread_mutex_unlock((*philo)->mutex_is_dead);
-	}
+	printf("%lld %d died\n", msec - philo[index]->t0, philo[index]->id);
+	pthread_mutex_unlock((*philo)->mutex_is_dead);
 	return (0);
 }
 
@@ -32,22 +33,20 @@ static int	ft_check_all_eat(t_philo **philo)
 {
 	int	i;
 	int	j;
-	int	tot;
 
 	i = -1;
 	j = 0;
-	tot = philo[0]->input->num_philo;
-	while (++i < tot)
+	while (++i < philo[0]->input->num_philo)
 	{
 		pthread_mutex_lock(philo[i]->mutex_finish_to_eat);
 		if (philo[i]->finish_to_eat == 1)
 			j++;
 		pthread_mutex_unlock(philo[i]->mutex_finish_to_eat);
 	}
-	if (j == tot)
+	if (j == philo[0]->input->num_philo)
 	{
 		i = -1;
-		while (++i < tot)
+		while (++i < philo[0]->input->num_philo)
 		{
 			pthread_mutex_lock(philo[i]->mutex_finish_to_eat);
 			philo[i]->finish_to_eat = 2;
@@ -58,22 +57,6 @@ static int	ft_check_all_eat(t_philo **philo)
 	return (0);
 }
 
-void	philo_died(t_philo *philo, struct timeval *tv)
-{
-	long long int	msec;
-
-	msec = (tv->tv_sec * 1000) + (tv->tv_usec / 1000);
-	pthread_mutex_lock(philo->mutex_is_dead);
-	philo->is_dead = 1;
-	printf("%lld %d died\n", msec - philo->t0, philo->id);
-	pthread_mutex_unlock(philo->mutex_is_dead);
-}
-
-void	ft_init(int *i)
-{
-	my_usleep(100);
-	*i = -1;
-}
 
 void	*check_death(void *arg)
 {
@@ -86,18 +69,15 @@ void	*check_death(void *arg)
 	my_usleep(100);
 	while (1)
 	{
-		ft_init(&i);
+		my_usleep(100);
+		i = -1;
 		if (ft_check_all_eat(philo) == 1)
 			return (NULL);
 		while (++i < philo[0]->input->num_philo)
 		{
 			ft_compute_msec(&tv, &millisec, philo[i]);
 			if (millisec >= philo[i]->input->time_to_die)
-			{
-				philo_died(philo[i], &tv);
-				set_all_one(philo);
-				return (NULL);
-			}
+				return (set_all_one(philo, i, &tv), NULL);
 		}
 	}
 	return (NULL);

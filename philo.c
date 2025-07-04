@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:34:23 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/04 13:01:32 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/04 15:24:16 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,22 +51,29 @@ void	*do_things(void *arg)
 	t_philo	*philo;
 
 	i = -1;
+	if ()
 	philo = (t_philo *)arg;
+	if (philo->id % 2 == 0)
+		usleep(100);
 	if (philo->input->number_of_times == -1)
 	{
-		if (philo->id % 2 == 0)
-			my_usleep(100);
 		while (1)
+		{
+			if (philo->id % 2 == 0)
+				usleep(100);
 			if (ft_routine(philo, i) == 1)
 				return (NULL);
+		}
 	}
 	else
 	{
-		if (philo->id % 2 == 0)
-			my_usleep(100);
 		while (++i < philo->input->number_of_times)
+		{
+			if (philo->id % 2 == 0)
+				usleep(100);
 			if (ft_routine(philo, i) == 1)
 				return (NULL);
+		}
 	}
 	return (NULL);
 }
@@ -77,23 +84,23 @@ void	ft_init_philo(t_philo **philo, t_input *inp, t_mutex *mutex)
 	struct timeval		tv;
 
 	i = -1;
+	gettimeofday(&tv, NULL);
 	while (++i < inp->num_philo)
 	{
 		philo[i]->id = i;
-		gettimeofday(&tv, NULL);
 		philo[i]->t0 = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 		philo[i]->time_last_meal = philo[i]->t0;
 		philo[i]->is_dead = 0;
 		philo[i]->finish_to_eat = 0;
-		philo[i]->mutex_is_dead = mutex->dead;
-		philo[i]->mutex_last_meal = &mutex->last_meal[i];
-		philo[i]->mutex_finish_to_eat = &mutex->finish_to_eat[i];
 		philo[i]->input = inp;
 		philo[i]->left_fork = &mutex->fork[i];
 		if (i == 0)
 			philo[i]->right_fork = &mutex->fork[inp->num_philo - 1];
 		else
 			philo[i]->right_fork = &mutex->fork[i - 1];
+		philo[i]->mutex_is_dead = mutex->dead;
+		philo[i]->mutex_last_meal = &mutex->last_meal[i];
+		philo[i]->mutex_finish_to_eat = &mutex->finish_to_eat[i];
 	}
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   one_philo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+        */
+/*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 14:20:30 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/22 22:00:49 by chiara_ciap      ###   ########.fr       */
+/*   Updated: 2025/07/04 14:55:28 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	*one_philo_exe(void *arg)
 	t0 = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 	millisec = (tv.tv_sec * 1000) + (tv.tv_usec / 1000) - t0;
 	printf("%lld %d has taken a fork\n", millisec, 0);
-	my_usleep(input->time_to_die * 1000);
+	usleep(input->time_to_die * 1000);
 	printf("%d %d died\n", input->time_to_die, 0);
 	return (NULL);
 }

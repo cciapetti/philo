@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:51:06 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/07 17:18:22 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:37:31 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ int	ft_check_positive(t_input *input)
 {
 	if (input->num_philo <= 0)
 		return (1);
-	if (input->time_to_die < 0)
+	if (input->time_to_die <= 0)
 		return (1);
-	if (input->time_to_eat < 0)
+	if (input->time_to_eat <= 0)
 		return (1);
-	if (input->time_to_sleep < 0)
+	if (input->time_to_sleep <= 0)
 		return (1);
 	if (input->number_of_times <= 0 && input->flag_optional == 1)
 		return (1);

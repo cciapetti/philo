@@ -6,17 +6,11 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:51:06 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/01 17:13:05 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:18:22 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-static void	ft_error_message(void)
-{
-	printf("number_of_philosophers\ntime_to_die\ntime_to_eat\n");
-	printf("time_to_sleep\n[number_of_times_each_philosopher_must_eat]\n");
-}
 
 int	ft_check_positive(t_input *input)
 {
@@ -66,6 +60,8 @@ int	ft_check_input(char **av)
 	i = 0;
 	while (av[++i] != NULL)
 	{
+		if (av[i][0] == '\0')
+			return (1);
 		j = 0;
 		while (av[i][j] != '\0')
 		{
@@ -89,12 +85,12 @@ int	main(int ac, char **av)
 	}
 	if (ft_check_input(av) == 1)
 	{
-		ft_error_message();
+		ft_error_message2();
 		return (free(input), 0);
 	}
 	if (ft_initialize_input(input, ac, av) == 1)
 	{
-		ft_error_message();
+		ft_error_message2();
 		return (free(input), 0);
 	}
 	ft_create_philo(input);

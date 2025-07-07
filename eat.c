@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 18:15:29 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/04 16:21:56 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:24:57 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,22 +61,36 @@ void	ft_lock_fork_first(t_philo *philo)
 
 void	ft_eat(t_philo *philo)
 {
-	if (philo->id % 2 == 0)
-		ft_lock_fork(philo);
+	if (philo->input->num_philo % 2 == 1)
+	{
+		if (philo->id - 1 % 2 == 1)
+			ft_lock_fork(philo);
+		else
+			ft_lock_fork_first(philo);
+	}
 	else
-		ft_lock_fork_first(philo);
+	{
+		if (philo->id % 2 == 1)
+			ft_lock_fork(philo);
+		else
+			ft_lock_fork_first(philo);
+	}
 }
 
 void	ft_unlock_fork(t_philo *philo)
 {
-	if (philo->id % 2 == 0)
+	if (philo->input->num_philo % 2 == 1)
 	{
-		pthread_mutex_unlock(philo->left_fork);
-		pthread_mutex_unlock(philo->right_fork);
+		if (philo->id - 1 % 2 == 1)
+			ft_unlock_first_right(philo);
+		else
+			ft_unlock_first_left(philo);
 	}
 	else
 	{
-		pthread_mutex_unlock(philo->right_fork);
-		pthread_mutex_unlock(philo->left_fork);
+		if (philo->id % 2 == 1)
+			ft_unlock_first_right(philo);
+		else
+			ft_unlock_first_left(philo);
 	}
 }

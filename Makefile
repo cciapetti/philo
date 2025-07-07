@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: chiara_ciapetti <chiara_ciapetti@studen    +#+  +:+       +#+         #
+#    By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/18 14:49:01 by cciapett          #+#    #+#              #
-#    Updated: 2025/06/22 21:46:45 by chiara_ciap      ###   ########.fr        #
+#    Updated: 2025/07/07 17:20:01 by cciapett         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ CC = cc
 
 CFLAGS = -Wall -Wextra -Werror -g -pthread
 
-SRC = main.c main_utils.c philo.c eat.c sleep.c death.c one_philo.c philo_utils.c
+SRC = main.c main_utils.c philo.c eat.c sleep.c death.c one_philo.c \
+philo_utils.c mutex.c
 
 OBJ = $(SRC:.c=.o)
 

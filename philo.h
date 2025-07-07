@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 14:50:48 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/04 13:09:46 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:23:48 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,10 @@ typedef struct s_mutex
 
 //MAIN_UTILS.C
 int		ft_atoi(const char *nptr);
-
+int		ft_strlen(char *s);
+void	ft_putstr_fd(char *s, int fd);
+void	ft_error_message(void);
+void	ft_error_message2(void);
 //PHILO.C
 void	ft_create_philo(t_input *input);
 void	*do_things(void *arg);
@@ -59,6 +62,8 @@ void	*do_things(void *arg);
 //PHILO_UTILS.C
 void	ft_threads(t_input *inp, t_philo **phi, pthread_t *th, \
 	pthread_t *death);
+void	ft_unlock_first_left(t_philo *philo);
+void	ft_unlock_first_right(t_philo *philo);
 
 //EAT.C
 void	ft_eat(t_philo *philo);
@@ -77,3 +82,7 @@ void	*check_death(void *arg);
 
 //ONE_PHILO.C
 void	one_philo(t_input *input);
+
+//MUTEX.C
+void	ft_init_mutex(t_mutex *mutex, t_input *input);
+void	ft_destroy_mutex(t_mutex *mutex, t_input *input);

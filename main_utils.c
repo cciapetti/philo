@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:14:07 by cciapett          #+#    #+#             */
-/*   Updated: 2025/06/19 14:12:12 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:16:41 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,38 @@ int	ft_atoi(const char *nptr)
 		return (result * (-1));
 	else
 		return (result);
+}
+
+int	ft_strlen(char *s)
+{
+	int	i;
+
+	i = -1;
+	while (s[++i] != '\0')
+		;
+	return (i);
+}
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] != '\0')
+	{
+		write(fd, &s[i], 1);
+		i++;
+	}
+}
+
+void	ft_error_message(void)
+{
+	ft_putstr_fd("number_of_philosophers\ntime_to_die\ntime_to_eat\n", 2);
+	ft_putstr_fd("time_to_sleep\n[number_of_times_each_philosopher\
+_must_eat]\n", 2);
+}
+
+void	ft_error_message2(void)
+{
+	ft_putstr_fd("Error: a postive numeric argument is required\n", 2);
 }

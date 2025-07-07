@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/18 15:34:23 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/04 16:22:19 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/07 17:19:09 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,6 @@ void	*do_things(void *arg)
 	{
 		while (1)
 		{
-			// if (philo->id % 2 == 0)
-			// 	usleep(100);
 			if (ft_routine(philo, i) == 1)
 				return (NULL);
 		}
@@ -68,8 +66,6 @@ void	*do_things(void *arg)
 	{
 		while (++i < philo->input->number_of_times)
 		{
-			// if (philo->id % 2 == 0)
-			// 	usleep(100);
 			if (ft_routine(philo, i) == 1)
 				return (NULL);
 		}
@@ -86,61 +82,21 @@ void	ft_init_philo(t_philo **philo, t_input *inp, t_mutex *mutex)
 	gettimeofday(&tv, NULL);
 	while (++i < inp->num_philo)
 	{
-		philo[i]->id = i;
+		philo[i]->id = i + 1;
 		philo[i]->t0 = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 		philo[i]->time_last_meal = philo[i]->t0;
 		philo[i]->is_dead = 0;
 		philo[i]->finish_to_eat = 0;
 		philo[i]->input = inp;
-		philo[i]->left_fork = &mutex->fork[i];
+		philo[i]->right_fork = &mutex->fork[i];
 		if (i == 0)
-			philo[i]->right_fork = &mutex->fork[inp->num_philo - 1];
+			philo[i]->left_fork = &mutex->fork[inp->num_philo - 1];
 		else
-			philo[i]->right_fork = &mutex->fork[i - 1];
+			philo[i]->left_fork = &mutex->fork[i - 1];
 		philo[i]->mutex_is_dead = mutex->dead;
 		philo[i]->mutex_last_meal = &mutex->last_meal[i];
 		philo[i]->mutex_finish_to_eat = &mutex->finish_to_eat[i];
 	}
-}
-
-void	ft_init_mutex(t_mutex *mutex, t_input *input)
-{
-	int	i;
-
-	i = -1;
-	mutex->fork = malloc(sizeof(pthread_mutex_t) * input->num_philo);
-	mutex->dead = malloc(sizeof(pthread_mutex_t));
-	mutex->last_meal = malloc(sizeof(pthread_mutex_t) * input->num_philo);
-	mutex->finish_to_eat = malloc(sizeof(pthread_mutex_t) * input->num_philo);
-	while (++i < input->num_philo)
-		pthread_mutex_init(&mutex->fork[i], NULL);
-	pthread_mutex_init(mutex->dead, NULL);
-	i = -1;
-	while (++i < input->num_philo)
-		pthread_mutex_init(&mutex->last_meal[i], NULL);
-	i = -1;
-	while (++i < input->num_philo)
-		pthread_mutex_init(&mutex->finish_to_eat[i], NULL);
-}
-
-void	ft_destroy_mutex(t_mutex *mutex, t_input *input)
-{
-	int	i;
-
-	i = -1;
-	while (++i < input->num_philo)
-		pthread_mutex_destroy(&mutex->fork[i]);
-	pthread_mutex_destroy(mutex->dead);
-	i = -1;
-	while (++i < input->num_philo)
-		pthread_mutex_destroy(&mutex->last_meal[i]);
-	i = -1;
-	while (++i < input->num_philo)
-		pthread_mutex_destroy(&mutex->finish_to_eat[i]);
-	free(mutex->fork);
-	free(mutex->dead);
-	free(mutex->last_meal);
-	free(mutex->finish_to_eat);
 }
 
 void	ft_create_philo(t_input *input)
@@ -165,4 +121,6 @@ void	ft_create_philo(t_input *input)
 	ft_destroy_mutex(&mutex, input);
 	while (++i < input->num_philo)
 		free(philo[i]);
+	free(thread);
+	free(philo);
 }

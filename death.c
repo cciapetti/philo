@@ -6,7 +6,7 @@
 /*   By: cciapett <cciapett@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/19 14:54:02 by cciapett          #+#    #+#             */
-/*   Updated: 2025/07/04 16:21:42 by cciapett         ###   ########.fr       */
+/*   Updated: 2025/07/07 16:51:56 by cciapett         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,9 @@ void	*check_death(void *arg)
 	t_philo			**philo;
 
 	philo = (t_philo **)arg;
-	usleep(100);
 	while (1)
 	{
-		usleep(100);
+		usleep(10);
 		i = -1;
 		if (ft_check_all_eat(philo) == 1)
 			return (NULL);
